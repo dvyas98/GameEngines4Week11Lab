@@ -3898,7 +3898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 5
-  FollowTarget: {fileID: 0}
+  FollowTarget: {fileID: 4992570710853281694, guid: 379838ed2fbafd7479da3b59b234d59a, type: 3}
   _Debug: 0
 --- !u!114 &146515190254360176
 MonoBehaviour:

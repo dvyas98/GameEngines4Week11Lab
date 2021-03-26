@@ -10,7 +10,7 @@ namespace Character
     public class WeaponHolder : InputMonoBehaviour
     {
         [Header("Weapon To Spawn"), SerializeField]
-        private GameObject WeaponToSpawn;
+        private WeaponScriptable WeaponToSpawn;
 
         [SerializeField] private Transform WeaponSocketLocation;
 
@@ -30,6 +30,29 @@ namespace Character
         private WeaponComponent EquippedWeapon;
         
         private static readonly int AimHorizontalHash = Animator.StringToHash("AimHorizontal");
+
+        internal void EquipWeapon(WeaponScriptable weaponScriptable)
+        {
+            GameObject spawnedWeapon = Instantiate(weaponScriptable.ItemPrefab, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
+            if (!spawnedWeapon) return;
+
+            EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
+            if (!EquippedWeapon) return;
+
+            EquippedWeapon.Initialize(this, weaponScriptable);
+
+            PlayerEvents.Invoke_OnWeaponEquipped(EquippedWeapon);
+
+            GripIKLocation = EquippedWeapon.GripLocation;
+            PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
+        }
+
+        internal void UnEquipWeapon()
+        {
+            Destroy(EquippedWeapon.gameObject);
+            EquippedWeapon = null;
+        }
+
         private static readonly int AimVerticalHash = Animator.StringToHash("AimVertical");
         private static readonly int IsFiringHash = Animator.StringToHash("IsFiring");
         private static readonly int IsReloadingHash = Animator.StringToHash("IsReloading");
@@ -53,18 +76,21 @@ namespace Character
         // Start is called before the first frame update
         void Start()
         {
-            GameObject spawnedWeapon = Instantiate(WeaponToSpawn, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
-            if (!spawnedWeapon) return;
+           // if (WeaponToSpawn) EquipWeapon(WeaponToSpawn);
             
-            EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
-            if (!EquippedWeapon) return;
+
+            //GameObject spawnedWeapon = Instantiate(WeaponToSpawn, WeaponSocketLocation.position, WeaponSocketLocation.rotation, WeaponSocketLocation);
+            //if (!spawnedWeapon) return;
             
-            EquippedWeapon.Initialize(this, PlayerCrosshair);
+            //EquippedWeapon = spawnedWeapon.GetComponent<WeaponComponent>();
+            //if (!EquippedWeapon) return;
             
-            PlayerEvents.Invoke_OnWeaponEquipped(EquippedWeapon);
+            //EquippedWeapon.Initialize(this, weaponScriptable);
             
-            GripIKLocation = EquippedWeapon.GripLocation;
-            PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
+            //PlayerEvents.Invoke_OnWeaponEquipped(EquippedWeapon);
+            
+            //GripIKLocation = EquippedWeapon.GripLocation;
+            //PlayerAnimator.SetInteger(WeaponTypeHash, (int)EquippedWeapon.WeaponInformation.WeaponType);
         }
 
         private void OnAnimatorIK(int layerIndex)

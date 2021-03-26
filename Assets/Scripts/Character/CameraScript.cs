@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 
 namespace Character
 {
-   public class CameraScript : InputMonoBehaviour
-   {
+   public class CameraScript : InputMonoBehaviour, PauseManager.IPausable
+    {
       [SerializeField] private float RotationPower = 10;
       [SerializeField] private float HorizontalDamping = 1;
       [SerializeField] private GameObject FollowTarget;
@@ -49,8 +49,16 @@ namespace Character
          GameInput.PlayerActionMap.Look.performed -= OnLooked;
    
       }
-      
-         
-   }
+
+        void PauseManager.IPausable.PauseGame()
+        {
+            GameInput.PlayerActionMap.Look.performed -= OnLooked;
+        }
+
+        void PauseManager.IPausable.UnPauseGame()
+        {
+            GameInput.PlayerActionMap.Look.performed += OnLooked;
+        }
+    }
 }
    

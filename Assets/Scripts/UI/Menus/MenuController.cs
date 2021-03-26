@@ -27,7 +27,10 @@ public class MenuController : MonoBehaviour
 
     }
 
-
+    private void Awake()
+    {
+        AppEvents.Invoke_OnMouseCursorEnable(true);
+    }
 
     public void AddMenu(string menuName, MenuWidget menuWidget)
     {

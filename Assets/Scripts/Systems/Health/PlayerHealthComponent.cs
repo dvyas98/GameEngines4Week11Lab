@@ -6,9 +6,9 @@ using Systems.Health;
 public class PlayerHealthComponent : HealthComponent
 {
     // Start is called before the first frame update
-    protected override void Start()
+    protected  void Start()
     {
-        base.Start();
+        //base.Start();
         PlayerEvents.Invoke_OnHealthIntialized(this);
     }
 
